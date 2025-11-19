@@ -1,0 +1,12 @@
+Flask
+openai
+SpeechRecognition
+pydub
+spacy
+pytextrank
+fr_core_news_md  
+python-dotenv
+pytest
+pytest-cov
+requests  
+gunicorn
