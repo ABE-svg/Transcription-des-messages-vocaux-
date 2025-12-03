@@ -11,7 +11,7 @@ from app.utils.audio_utils import allowed_file, save_temp_file
 def create_app():
     app = Flask(__name__)
 
-    swagger = Swagger(app, template_file="app/docs/swagger.yaml")
+    swagger = Swagger(app, template_file="docs/swagger.yaml")
 
     @app.route('/transcribe', methods=['POST'])
     def transcribe():
