@@ -1,4 +1,68 @@
+// ===============================
+// Configuration
+// ===============================
+
+const API_BASE = "";
+const ENDPOINT = "/whisper";
+
+// Récupération des éléments du DOM
+const uploadForm = document.getElementById("uploadForm");
+const fileInput = document.getElementById("fileInput");
+const summaryToggle = document.getElementById("summaryToggle");
+const submitBtn = document.getElementById("submitBtn");
+const progress = document.getElementById("progress");
+const errorBox = document.getElementById("errorBox");
+const infoBox = document.getElementById("infoBox");
+const transcriptEl = document.getElementById("transcript");
+const summaryEl = document.getElementById("summary");
+
+// ===============================
+// Utils d'affichage
+// ===============================
+function setText(el, text) {
+  el.textContent = text ?? "";
+}
+
+function show(el) {
+  el.style.display = "block";
+}
+
+function hide(el) {
+  el.style.display = "none";
+}
+
+function resetOutputs() {
+  hide(errorBox);
+  hide(infoBox);
+  setText(transcriptEl, "");
+  setText(summaryEl, "");
+}
+
+// ===============================
+// Validation du fichier
+// ===============================
+function validateFile(file) {
+  if (!file) {
+    return "Veuillez sélectionner un fichier audio ou vidéo.";
+  }
+
+  // Limite de taille : ici 50 Mo
+  const maxBytes = 50 * 1024 * 1024;
+  if (file.size > maxBytes) {
+    return "Fichier trop volumineux (max 50 Mo).";
+  }
+
+  // On pourrait vérifier le type MIME si besoin :
+  // if (!file.type.startsWith("audio/") && !file.type.startsWith("video/")) {
+  //   return "Merci d'envoyer un fichier audio ou vidéo.";
+  // }
+
+  return null;
+}
+
+// ===============================
 // Gestion du formulaire d'upload
+// ===============================
 uploadForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   resetOutputs();
@@ -11,63 +75,69 @@ uploadForm.addEventListener("submit", async (e) => {
     return;
   }
 
+  // Construction du FormData
   const formData = new FormData();
+  // IMPORTANT : le nom "file" doit correspondre au paramètre du backend
   formData.append("file", file);
   formData.append("summary", summaryToggle.checked ? "true" : "false");
 
-  try {
-    submitBtn.disabled = true;
-    show(progress);
+  // UI : désactiver le bouton et afficher "chargement"
+  submitBtn.disabled = true;
+  setText(submitBtn, "Transcription en cours...");
+  show(progress);
+  setText(infoBox, "Transcription en cours, merci de patienter...");
+  show(infoBox);
 
+  try {
     const res = await fetch(`${API_BASE}${ENDPOINT}`, {
       method: "POST",
       body: formData,
     });
 
     if (!res.ok) {
-      const text = await res.text();
-      throw new Error(text || `Erreur HTTP ${res.status}`);
+      const errorText = await res.text().catch(() => "");
+      throw new Error(
+        `Erreur serveur (${res.status}) : ${errorText || res.statusText}`
+      );
     }
 
     const data = await res.json();
-    const transcript = data.transcript ?? data?.results?.[0]?.transcript ?? "";
-    const summary = data.summary ?? data?.results?.[0]?.summary ?? "";
 
-    setText(transcriptEl, transcript || "—");
-    setText(summaryEl, summary || (summaryToggle.checked ? "—" : "Résumé désactivé"));
-    setText(infoBox, "Transcription terminée.");
+    // On s'attend à { filename, transcript, summary }
+    const transcript = data.transcript ?? "";
+    const summary = data.summary ?? "";
+
+    if (!transcript) {
+      setText(errorBox, "La transcription est vide ou indisponible.");
+      show(errorBox);
+      return;
+    }
+
+    setText(transcriptEl, transcript);
+
+    if (summaryToggle.checked && summary) {
+      setText(summaryEl, summary);
+    } else if (summaryToggle.checked && !summary) {
+      setText(
+        summaryEl,
+        "Résumé demandé mais non généré (fonctionnalité à améliorer côté serveur)."
+      );
+    } else {
+      setText(summaryEl, "Résumé désactivé.");
+    }
+
+    setText(infoBox, "Transcription terminée avec succès.");
     show(infoBox);
-  } catch (error) {
-    setText(errorBox, `Échec: ${error.message}`);
+  } catch (err) {
+    console.error(err);
+    setText(
+      errorBox,
+      "Une erreur est survenue pendant la transcription : " + err.message
+    );
     show(errorBox);
   } finally {
-    hide(progress);
     submitBtn.disabled = false;
+    setText(submitBtn, "Transcrire");
+    hide(progress);
   }
 });
-
-//
-function validateFile(file) {
-  const maxBytes = 100 * 1024 * 1024; // limite 100MB
-  if (!file) return "Aucun fichier sélectionné.";
-  if (file.size > maxBytes) return "Fichier trop volumineux (max 50MB).";
-  // Pas de restriction sur le type MIME ou l'extension
-  return null;
-}
-
-// Helpers pour afficher/masquer et écrire du texte
-function setText(el, text) {
-  el.textContent = text;
-}
-function show(el) {
-  el.style.display = "block";
-}
-function hide(el) {
-  el.style.display = "none";
-}
-function resetOutputs() {
-  hide(errorBox);
-  hide(infoBox);
-  setText(transcriptEl, "");
-  setText(summaryEl, "");
-}
