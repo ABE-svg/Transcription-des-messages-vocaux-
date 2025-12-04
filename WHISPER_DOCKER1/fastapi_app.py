@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException, Form
+from fastapi.responses import FileResponse
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -86,6 +87,10 @@ def health_check():
     """
     return {"status": "ok", "device": DEVICE}
 
+
+@app.get("/")
+def serve_frontend():
+    return FileResponse(Path("frontend/index.html"))
 
 # Servir le frontend (index.html, script.js, style.css) depuis un dossier "frontend"
 # Assure-toi d'avoir le dossier : ./frontend/index.html, ./frontend/script.js, ./frontend/style.css
