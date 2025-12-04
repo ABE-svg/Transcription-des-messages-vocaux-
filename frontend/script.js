@@ -1,41 +1,4 @@
-const API_BASE = window.location.origin; // si frontend monté par FastAPI
-const ENDPOINT = "/whisper"; 
-
-const uploadForm = document.getElementById("uploadForm");
-const fileInput = document.getElementById("fileInput");
-const summaryToggle = document.getElementById("summaryToggle");
-const submitBtn = document.getElementById("submitBtn");
-
-const progress = document.getElementById("progress");
-const errorBox = document.getElementById("errorBox");
-const infoBox = document.getElementById("infoBox");
-
-const transcriptEl = document.getElementById("transcript");
-const summaryEl = document.getElementById("summary");
-
-function show(el) { el.classList.remove("hidden"); }
-function hide(el) { el.classList.add("hidden"); }
-function setText(el, text) { el.textContent = text ?? ""; }
-
-function resetOutputs() {
-  setText(transcriptEl, "");
-  setText(summaryEl, "");
-  hide(errorBox);
-  hide(infoBox);
-}
-
-function validateFile(file) {
-  // Exemple: limite 50MB, formats audio courants
-  const maxBytes = 50 * 1024 * 1024;
-  const allowed = ["audio/mpeg", "audio/wav", "audio/x-wav", "audio/mp4", "audio/aac", "audio/ogg", "audio/webm"];
-  if (!file) return "Aucun fichier sélectionné.";
-  if (file.size > maxBytes) return "Fichier trop volumineux (max 50MB).";
-  if (!allowed.includes(file.type) && !file.name.toLowerCase().match(/\.(mp3|wav|m4a|aac|ogg|webm)$/)) {
-    return "Format non reconnu. Essaie mp3, wav, m4a, aac, ogg, webm.";
-  }
-  return null;
-}
-
+// Gestion du formulaire d'upload
 uploadForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   resetOutputs();
@@ -49,9 +12,7 @@ uploadForm.addEventListener("submit", async (e) => {
   }
 
   const formData = new FormData();
-  //  "file" ou "files"
   formData.append("file", file);
-  // API demande un param "summary" booléen ou string:
   formData.append("summary", summaryToggle.checked ? "true" : "false");
 
   try {
@@ -69,14 +30,11 @@ uploadForm.addEventListener("submit", async (e) => {
     }
 
     const data = await res.json();
-
-
     const transcript = data.transcript ?? data?.results?.[0]?.transcript ?? "";
     const summary = data.summary ?? data?.results?.[0]?.summary ?? "";
 
     setText(transcriptEl, transcript || "—");
     setText(summaryEl, summary || (summaryToggle.checked ? "—" : "Résumé désactivé"));
-
     setText(infoBox, "Transcription terminée.");
     show(infoBox);
   } catch (error) {
@@ -87,3 +45,29 @@ uploadForm.addEventListener("submit", async (e) => {
     submitBtn.disabled = false;
   }
 });
+
+//
+function validateFile(file) {
+  const maxBytes = 100 * 1024 * 1024; // limite 100MB
+  if (!file) return "Aucun fichier sélectionné.";
+  if (file.size > maxBytes) return "Fichier trop volumineux (max 50MB).";
+  // Pas de restriction sur le type MIME ou l'extension
+  return null;
+}
+
+// Helpers pour afficher/masquer et écrire du texte
+function setText(el, text) {
+  el.textContent = text;
+}
+function show(el) {
+  el.style.display = "block";
+}
+function hide(el) {
+  el.style.display = "none";
+}
+function resetOutputs() {
+  hide(errorBox);
+  hide(infoBox);
+  setText(transcriptEl, "");
+  setText(summaryEl, "");
+}
