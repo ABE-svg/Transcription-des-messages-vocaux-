@@ -21,7 +21,7 @@ async def handler(files: List[UploadFile] = File(...)):
     results = []
 
     for file in files:
-        with NamedTemporaryFile(delete=False) as temp:
+        with NamedTemporaryFile(delete=False, suffix=".wav") as temp:
             # Save uploaded file
             temp.write(await file.read())
             temp.flush()
