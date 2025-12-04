@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Transcription & Résumé</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>Transcription audio</h1>
+    <p class="subtitle">Uploade un fichier audio, obtiens la transcription et un résumé optionnel.</p>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Upload</h2>
+      <form id="uploadForm">
+        <div class="form-row">
+          <label for="fileInput">Fichier audio</label>
+          <input id="fileInput" type="file" accept="audio/*" required />
+        </div>
+
+        <div class="form-row inline">
+          <label class="checkbox">
+            <input id="summaryToggle" type="checkbox" />
+            <span>Générer un résumé</span>
+          </label>
+        </div>
+
+        <div class="form-row">
+          <button id="submitBtn" type="submit">Transcrire</button>
+        </div>
+
+        <div id="progress" class="progress hidden">
+          <div class="spinner"></div>
+          <span>Traitement en cours…</span>
+        </div>
+
+        <div id="errorBox" class="alert error hidden"></div>
+        <div id="infoBox" class="alert info hidden"></div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Résultats</h2>
+      <div class="results">
+        <div class="result-block">
+          <h3>Transcription</h3>
+          <pre id="transcript" class="code"></pre>
+        </div>
+        <div class="result-block">
+          <h3>Résumé</h3>
+          <pre id="summary" class="code"></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <small>Prototype — FastAPI + Frontend léger. Ajuste le style et les comportements selon tes besoins.</small>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
