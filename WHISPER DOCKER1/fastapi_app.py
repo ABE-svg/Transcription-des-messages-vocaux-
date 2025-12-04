@@ -37,3 +37,13 @@ async def handler(files: List[UploadFile] = File(...)):
 @app.get("/", response_class=RedirectResponse)
 async def redirect_to_docs():
     return "/docs"
+
+
+# Autoriser le navigateur à appeler l’API et servir le frontend depuis FastAPI.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8000"],  
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
