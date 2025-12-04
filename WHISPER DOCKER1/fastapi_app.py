@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.staticfiles import StaticFiles
 from typing import List
 import whisper
 import torch
@@ -47,3 +48,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# Sert index.html par défaut
+app.mount("/", StaticFiles(directory="frontend", html=True), name="static")
+
+
