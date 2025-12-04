@@ -8,40 +8,50 @@
 </head>
 <body>
   <header class="app-header">
-    <h1>Transcription audio</h1>
-    <p class="subtitle">Uploade un fichier audio, obtiens la transcription et un résumé optionnel.</p>
+    <h1>Transcription audio / vidéo</h1>
+    <p class="subtitle">
+      Uploade un fichier audio ou vidéo, obtiens la transcription et, si tu veux, un résumé automatique.
+    </p>
   </header>
 
   <main class="container">
+    <!-- Carte : formulaire d'upload -->
     <section class="card">
-      <h2>Upload</h2>
-      <form id="uploadForm">
-        <div class="form-row">
-          <label for="fileInput">Fichier audio</label>
-          <input id="fileInput" type="file" accept="*/*" required />
+      <h2>Uploader un fichier</h2>
+      <form id="uploadForm" class="upload-form">
+        <div class="field">
+          <label for="fileInput">Fichier audio ou vidéo</label>
+          <input
+            type="file"
+            id="fileInput"
+            name="file"
+            accept="audio/*,video/*"
+            required
+          />
+          <p class="hint">
+            Formats audio/vidéo supportés. Taille maximale : 50 Mo.
+          </p>
         </div>
 
-        <div class="form-row inline">
-          <label class="checkbox">
-            <input id="summaryToggle" type="checkbox" />
-            <span>Générer un résumé</span>
+        <div class="field inline">
+          <label class="toggle">
+            <input type="checkbox" id="summaryToggle" />
+            <span>Générer un résumé du contenu</span>
           </label>
         </div>
 
-        <div class="form-row">
-          <button id="submitBtn" type="submit">Transcrire</button>
-        </div>
+        <div id="errorBox" class="alert alert-error" style="display:none"></div>
+        <div id="infoBox" class="alert alert-info" style="display:none"></div>
 
-        <div id="progress" class="progress hidden">
-          <div class="spinner"></div>
-          <span>Traitement en cours…</span>
-        </div>
+        <div id="progress" class="progress hidden"></div>
 
-        <div id="errorBox" class="alert error hidden"></div>
-        <div id="infoBox" class="alert info hidden"></div>
+        <button type="submit" id="submitBtn" class="btn-primary">
+          Transcrire
+        </button>
       </form>
     </section>
 
+    <!-- Carte : résultats -->
     <section class="card">
       <h2>Résultats</h2>
       <div class="results">
@@ -58,7 +68,7 @@
   </main>
 
   <footer class="app-footer">
-    <small>Prototype — FastAPI + Frontend léger. </small>
+    <small>Prototype — FastAPI + Whisper + frontend léger.</small>
   </footer>
 
   <script src="script.js"></script>
