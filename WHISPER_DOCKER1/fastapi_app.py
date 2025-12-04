@@ -80,12 +80,12 @@ async def transcribe_endpoint(
         raise HTTPException(status_code=500, detail=f"Erreur pendant la transcription : {e}")
 
 
-@app.get("/health")
-def health_check():
-    """
-    Petit endpoint de santé pour vérifier que l'API tourne.
-    """
-    return {"status": "ok", "device": DEVICE}
+# @app.get("/health")
+# def health_check():
+#     """
+#     Petit endpoint de santé pour vérifier que l'API tourne.
+#     """
+#     return {"status": "ok", "device": DEVICE}
 
 
 @app.get("/")
