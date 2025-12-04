@@ -36,9 +36,9 @@ async def handler(files: List[UploadFile] = File(...)):
 
     return JSONResponse(content={"results": results})
 
-@app.get("/", response_class=RedirectResponse)
-async def redirect_to_docs():
-    return "/docs"
+#@app.get("/", response_class=RedirectResponse)
+#"async def redirect_to_docs():
+  #  return "/docs"
 
 
 # Autoriser le navigateur à appeler l’API et servir le frontend depuis FastAPI.
