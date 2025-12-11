@@ -13,4 +13,4 @@ requests
 gunicorn
 transformers
 torch
-whisper
+openai-whisper
