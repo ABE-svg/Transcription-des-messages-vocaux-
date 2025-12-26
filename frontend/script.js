@@ -46,8 +46,8 @@ function validateFile(file) {
     return "Veuillez sélectionner un fichier audio ou vidéo.";
   }
 
-  // Limite de taille : ici 50 Mo
-  const maxBytes = 50 * 1024 * 1024;
+  // Limite de taille : ici 100 Mo
+  const maxBytes = 100 * 1024 * 1024;
   if (file.size > maxBytes) {
     return "Fichier trop volumineux (max 50 Mo).";
   }
@@ -75,9 +75,7 @@ uploadForm.addEventListener("submit", async (e) => {
     return;
   }
 
-  // Construction du FormData
   const formData = new FormData();
-  // IMPORTANT : le nom "file" doit correspondre au paramètre du backend
   formData.append("file", file);
   formData.append("summary", summaryToggle.checked ? "true" : "false");
 
@@ -120,7 +118,7 @@ uploadForm.addEventListener("submit", async (e) => {
     } else if (summaryToggle.checked && !summary) {
       setText(
         summaryEl,
-        "Résumé demandé mais non généré (fonctionnalité à améliorer côté serveur)."
+        "(fonctionnalité à améliorer côté serveur)."
       );
     } else {
       setText(summaryEl, "Résumé désactivé.");
