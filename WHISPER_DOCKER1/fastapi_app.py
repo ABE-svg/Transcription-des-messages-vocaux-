@@ -1,97 +1,39 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException, Form
-from fastapi.responses import FileResponse
-from fastapi.responses import JSONResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
-from tempfile import NamedTemporaryFile
-from pathlib import Path
+from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.responses import JSONResponse, RedirectResponse
+from typing import List
 import whisper
 import torch
+from tempfile import NamedTemporaryFile
 
-# Détection du device (GPU si dispo, sinon CPU)
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-# Chargement du modèle Whisper (taille 'base' pour rester raisonnable)
 model = whisper.load_model("base", device=DEVICE)
 
-app = FastAPI(title="TranscriptoAI", description="API de transcription audio/vidéo", version="1.0.0")
-
-# CORS : à adapter selon où tu héberges le front
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # ou ["http://localhost:8000"] si tu veux restreindre
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
+app = FastAPI()
 
 @app.post("/whisper")
-async def transcribe_endpoint(
-    file: UploadFile = File(...),
-    summary: bool = Form(False),
-):
-    """
-    Endpoint principal :
-    - Reçoit un fichier (audio ou vidéo)
-    - Option summary=True pour demander un résumé
-    - Retourne JSON { filename, transcript, summary }
-    """
-    # Vérification basique du type de fichier
-    if not file.filename:
-        raise HTTPException(status_code=400, detail="Aucun fichier reçu.")
+async def handler(files: List[UploadFile] = File(...)):
+    if not files:
+        raise HTTPException(status_code=400, detail="No file uploaded")
 
-    # On accepte tout ce que ffmpeg/whisper sait lire (audio/vidéo)
-    # Mais tu peux restreindre ici sur file.content_type si tu veux.
-    try:
-        suffix = Path(file.filename).suffix
-        if not suffix:
-            suffix = ".bin"
+    results = []
 
-        # Écriture dans un fichier temporaire
-        with NamedTemporaryFile(delete=False, suffix=suffix) as temp:
-            contents = await file.read()
-            temp.write(contents)
-            temp_path = temp.name
+    for file in files:
+        with NamedTemporaryFile(delete=False, suffix=".wav") as temp:
+            # Save uploaded file
+            temp.write(await file.read())
+            temp.flush()
 
-        # Transcription avec Whisper
-        result = model.transcribe(temp_path)
-        transcript = (result.get("text") or "").strip()
+            # Transcription
+            result = model.transcribe(temp.name)
 
-        # Petit "résumé" simple (ici : premières phrases / caractères)
-        summary_text = None
-        if summary and transcript:
-            # découpe très naïve en phrases, à améliorer éventuellement
-            sentences = [s.strip() for s in transcript.split(".") if s.strip()]
-            if len(sentences) <= 2:
-                summary_text = transcript
-            else:
-                summary_text = ". ".join(sentences[:2]) + "."
-
-        # Construction de la réponse
-        response_data = {
+        results.append({
             "filename": file.filename,
-            "transcript": transcript,
-            "summary": summary_text,
-        }
-        return JSONResponse(content=response_data)
+            "transcript": result["text"]
+        })
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erreur pendant la transcription : {e}")
+    return JSONResponse(content={"results": results})
 
-
-# @app.get("/health")
-# def health_check():
-#     """
-#     Petit endpoint de santé pour vérifier que l'API tourne.
-#     """
-#     return {"status": "ok", "device": DEVICE}
-
-
-@app.get("/")
-def serve_frontend():
-    return FileResponse(Path("frontend/index.html"))
-
-# Servir le frontend (index.html, script.js, style.css) depuis un dossier "frontend"
-# Assure-toi d'avoir le dossier : ./frontend/index.html, ./frontend/script.js, ./frontend/style.css
-app.mount("/", StaticFiles(directory="frontend", html=True), name="static")
+@app.get("/", response_class=RedirectResponse)
+async def redirect_to_docs():
+    return "/docs"
