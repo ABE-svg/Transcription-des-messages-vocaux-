@@ -1,0 +1,27 @@
+swagger: "2.0"
+info:
+  title: "API de transcription audio et résumé"
+  description: "Documentation automatique de l'API"
+  version: "1.0.0"
+
+basePath: "/"
+schemes:
+  - "http"
+
+paths:
+  /transcribe:
+    post:
+      consumes:
+        - multipart/form-data
+      parameters:
+        - in: formData
+          name: audio
+          type: file
+          required: true
+        - in: query
+          name: summary
+          type: boolean
+          required: false
+      responses:
+        200:
+          description: "Transcription réalisée"

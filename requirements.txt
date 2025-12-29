@@ -1,4 +1,5 @@
 Flask
+flasgger
 openai
 SpeechRecognition
 pydub
@@ -10,3 +11,6 @@ pytest
 pytest-cov
 requests  
 gunicorn
+transformers
+torch
+openai-whisper

@@ -16,6 +16,8 @@ def allowed_file(filename):
 
 def save_temp_file(file):
     filename = secure_filename(file.filename)
-    temp_path = f"/tmp/{filename}"
+    temp_dir = "temp"
+    os.makedirs(temp_dir, exist_ok=True)
+    temp_path = os.path.join(temp_dir, filename)
     file.save(temp_path)
     return temp_path

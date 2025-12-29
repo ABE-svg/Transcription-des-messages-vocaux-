@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcription Audio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="main-wrapper">
+    
+    <nav class="navbar">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20M7 7v10M17 7v10"></path></svg>
+            <span>Transcription Audio</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        
+        <header class="page-header">
+            <p>Importez un fichier audio pour obtenir la transcription et une synthèse automatique.</p>
+        </header>
+
+        <div class="card upload-card">
+            <form id="transcription-form">
+                
+                <div class="form-group">
+                    <label class="section-label">1. Fichier source</label>
+                    <input type="file" id="audio" name="audio" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="section-label">2. Mode d'analyse</label>
+                    <div class="radio-group">
+                        
+                        <label class="radio-card">
+                            <input type="radio" name="summary" value="false" checked>
+                            <div class="card-content">
+                                <span class="radio-title">Transcription</span>
+                                <span class="radio-desc">Convertit l'audio en texte brut.</span>
+                            </div>
+                        </label>
+
+                        <label class="radio-card">
+                            <input type="radio" name="summary" value="true">
+                            <div class="card-content">
+                                <span class="radio-title">Transcription + Résumé</span>
+                                <span class="radio-desc">Ajoute une synthèse des points clés.</span>
+                            </div>
+                        </label>
+
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <span>Lancer le traitement</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </button>
+            </form>
+        </div>
+
+        <div id="loader" class="loader hidden">
+            <div class="spinner"></div>
+            <p>Analyse en cours, veuillez patienter...</p>
+        </div>
+
+        <div class="results-grid">
+            
+            <div class="card result-card">
+                <div class="card-header">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <h2>Transcription intégrale</h2>
+                </div>
+                <div id="transcription-output" class="text-content empty">Les résultats s'afficheront ici après analyse.</div>
+            </div>
+
+            <div class="card result-card">
+                <div class="card-header">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                    <h2>Résumé exécutif</h2>
+                </div>
+                <div id="summary-output" class="text-content empty">Sélectionnez l'option "Résumé" pour générer ce contenu.</div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+document.getElementById("transcription-form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const loader = document.getElementById("loader");
+    const transcriptionOutput = document.getElementById("transcription-output");
+    const summaryOutput = document.getElementById("summary-output");
+
+    transcriptionOutput.innerHTML = '<span class="loading-text">Génération en cours...</span>';
+    summaryOutput.innerHTML = '<span class="loading-text">En attente...</span>';
+    
+    loader.classList.remove("hidden");
+
+    const formData = new FormData(this);
+    const summary = formData.get("summary");
+
+    try {
+        const response = await fetch(`/transcribe?summary=${summary}`, {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        transcriptionOutput.innerHTML = data.transcription ? data.transcription.replace(/\n/g, '<br>') : "Aucune transcription.";
+        summaryOutput.innerHTML = data.summary ? data.summary.replace(/\n/g, '<br>') : "Pas de résumé demandé.";
+
+    } catch (error) {
+        transcriptionOutput.textContent = "Erreur technique lors du traitement.";
+        console.error(error);
+    } finally {
+        loader.classList.add("hidden");
+    }
+});
+</script>
+
+</body>
+</html>
