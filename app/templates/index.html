@@ -1,35 +1,43 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <title>Transcription audio</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
 
-<h1>Transcription audio</h1>
+{% block title %}Accueil — Transcription Audio{% endblock %}
 
-<form id="transcription-form">
-    <label>Fichier audio :</label>
-    <input type="file" name="audio" required>
+{% block content %}
 
-    <label>Résumé :</label>
+<!-- FORMULAIRE -->
+<form id="transcription-form" class="card">
+    <label>Fichier audio</label>
+    <input
+        type="file"
+        name="audio"
+        accept=".mp3,.wav,.m4a,.flac"
+        required
+    >
+
+    <label>Résumé automatique</label>
     <select name="summary">
         <option value="false">Non</option>
         <option value="true">Oui</option>
     </select>
 
-    <button type="submit">Transcrire</button>
+    <button type="submit">🎙️ Transcrire</button>
 </form>
 
+<!-- LOADER (sans pourcentage) -->
+<div id="loader" class="loader hidden">
+    <div class="progress-bar">
+        <div class="progress-fill"></div>
+    </div>
+    <p>Traitement en cours…</p>
+</div>
+
+<!-- BOÎTE D’ERREUR -->
+<div id="error-box" class="error hidden"></div>
+
+<!-- SORTIES -->
 <div class="console">
     <h2>Transcription</h2>
     <pre id="transcription-output"></pre>
-</div>
-
-<div id="loader" class="loader hidden">
-    <div class="progress-bar"></div>
-    <p>Transcription en cours...</p>
 </div>
 
 <div class="console">
@@ -37,6 +45,7 @@
     <pre id="summary-output"></pre>
 </div>
 
+<!-- SCRIPT -->
 <script>
 document.getElementById("transcription-form").addEventListener("submit", async function(e) {
     e.preventDefault();
@@ -44,9 +53,13 @@ document.getElementById("transcription-form").addEventListener("submit", async f
     const loader = document.getElementById("loader");
     const transcriptionOutput = document.getElementById("transcription-output");
     const summaryOutput = document.getElementById("summary-output");
+    const errorBox = document.getElementById("error-box");
 
+    // Reset UI
     transcriptionOutput.textContent = "";
     summaryOutput.textContent = "";
+    errorBox.textContent = "";
+    errorBox.classList.add("hidden");
 
     loader.classList.remove("hidden");
 
@@ -61,16 +74,22 @@ document.getElementById("transcription-form").addEventListener("submit", async f
 
         const data = await response.json();
 
+        if (!response.ok) {
+            throw new Error(data.error || "Erreur serveur inconnue");
+        }
+
         transcriptionOutput.textContent = data.transcription || "";
         summaryOutput.textContent = data.summary || "";
 
     } catch (error) {
-        transcriptionOutput.textContent = "Erreur pendant la transcription.";
+        errorBox.textContent = "❌ " + error.message;
+        errorBox.classList.remove("hidden");
+
     } finally {
         loader.classList.add("hidden");
     }
 });
 </script>
 
-</body>
-</html>
+{% endblock %}
+

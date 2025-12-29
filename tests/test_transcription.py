@@ -8,7 +8,6 @@ def test_transcribe_audio_returns_text():
     with patch("app.services.transcribe_service.whisper.load_model") as mock_load:
         mock_model = mock_load.return_value
         mock_model.transcribe.return_value = fake_result
-
         result = transcribe_audio("fake/path/audio.mp3")
 
         assert isinstance(result, str)

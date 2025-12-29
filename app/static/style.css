@@ -1,20 +1,39 @@
 body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f8;
-    padding: 40px;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #f6f8fb;
+    margin: 0;
 }
 
-h1 {
+header {
+    background: #4a6cf7;
+    color: white;
+    padding: 30px;
     text-align: center;
 }
 
-form {
+.subtitle {
+    margin-top: 10px;
+    opacity: 0.9;
+}
+
+main {
+    padding: 40px;
+}
+
+footer {
+    text-align: center;
+    padding: 15px;
+    background: #eee;
+    font-size: 0.9em;
+}
+
+.card {
     background: white;
-    padding: 20px;
     max-width: 500px;
     margin: auto;
-    border-radius: 6px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 label {
@@ -22,14 +41,18 @@ label {
     margin-top: 15px;
 }
 
+input, select, button {
+    width: 100%;
+    margin-top: 5px;
+    padding: 10px;
+}
+
 button {
     margin-top: 20px;
-    padding: 10px;
-    width: 100%;
-    background: #007bff;
+    background: #4a6cf7;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
 }
 
@@ -37,16 +60,25 @@ button {
     background: #111;
     color: #0f0;
     padding: 15px;
-    margin-top: 20px;
-    border-radius: 4px;
+    margin: 30px auto;
+    border-radius: 6px;
     max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    overflow-x: auto;
 }
 
-pre {
-    white-space: pre-wrap;
+.console h2 {
+    margin-top: 0;
 }
+
+
+pre {
+    white-space: pre-wrap;      
+    word-wrap: break-word;      
+    overflow-wrap: break-word;  /
+    margin: 0;
+    font-family: Consolas, monospace;
+}
+
 .loader {
     max-width: 500px;
     margin: 20px auto;
@@ -54,30 +86,39 @@ pre {
 }
 
 .progress-bar {
-    height: 10px;
-    width: 100%;
+    height: 8px;
     background: #ddd;
-    border-radius: 5px;
     overflow: hidden;
+    border-radius: 4px;
     position: relative;
 }
 
 .progress-bar::before {
     content: "";
     position: absolute;
-    left: -40%;
     width: 40%;
     height: 100%;
-    background: #007bff;
+    background: #4a6cf7;
     animation: loading 1s infinite;
 }
 
 @keyframes loading {
-    0% { left: -40%; }
-    100% { left: 100%; }
+    from { left: -40%; }
+    to { left: 100%; }
 }
 
 .hidden {
     display: none;
 }
 
+.error {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 12px;
+    background: #ffe5e5;
+    color: #b00020;
+    border: 1px solid #ffb3b3;
+    border-radius: 5px;
+    font-weight: bold;
+    text-align: center;
+}
