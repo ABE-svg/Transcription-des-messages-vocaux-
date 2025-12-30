@@ -1,16 +1,18 @@
 set -e
 
-# Détection de python en fonction de l'OS
-if command -v python3 &>/dev/null; then
-    PYTHON=python3
-elif command -v python &>/dev/null; then
-    PYTHON=python
-elif command -v py &>/dev/null; then
-    PYTHON="py -3"
+# Vérification obligatoire de Python 3.11 (tous OS)
+
+if command -v python3.11 >/dev/null 2>&1; then
+    PYTHON=python3.11
+elif command -v py >/dev/null 2>&1 && py -3.11 --version >/dev/null 2>&1; then
+    PYTHON="py -3.11"
 else
-    echo "Aucun interpréteur Python trouvé."
+    echo "Erreur : Python 3.11 est requis."
+    echo "Veuillez installer Python 3.11 puis relancer le script."
     exit 1
 fi
+
+echo "Python utilisé : $PYTHON"
 
 $PYTHON -m venv .venv
 
