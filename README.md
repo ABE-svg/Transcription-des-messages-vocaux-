@@ -120,6 +120,8 @@ Puis, activez la `.venv` créé et lancez :
 ```bash
 python -m app.api
 ```
+Si tout se passe bien, Flask affiche : Running on http://127.0.0.1:5000/
+Ouvrez un navigateur et aller à l’adresse
 
 
 
