@@ -31,7 +31,7 @@ pytest || {
   exit 1
 }
 
-echo "tous les tests sotn excecutés "
+echo "tous les tests sont excecutés "
 echo "Environnement prêt. Pour l'activer exécutez : "
 echo "Vous ne pourrez par lancer le bot, car il est déjà lancé sur VPS  "
 echo "source .venv/Scripts/activate    # Windows Git Bash"
