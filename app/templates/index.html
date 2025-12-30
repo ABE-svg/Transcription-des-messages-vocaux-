@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcription Audio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M2 12h20"></path>
+        </svg>
+        <span>Transcription Audio</span>
+    </div>
+</nav>
+
+<div class="container">
+
+    <header class="page-header">
+        <p>Importez un fichier audio pour obtenir la transcription et une synthèse automatique.</p>
+    </header>
+
+    <div class="card" style="margin-bottom:30px;">
+    <p style="margin:0; color:#64748b; font-size:0.95rem;">
+        🔹 Ce projet est également disponible sous forme de
+        <a href="https://t.me/VoiceToMessage_Bot" target="_blank" style="color:#2563eb; font-weight:600; text-decoration:none;">
+            chatbot Telegram
+        </a>.
+        <br>
+        Il permet la transcription de messages vocaux directement sur Telegram,
+        en plusieurs langues, avec une option de traduction automatique.
+    </p>
+    </div>
+
+
+    <div class="card upload-card">
+        <form id="transcription-form">
+
+            <div class="form-group">
+                <label class="section-label">1. Fichier source</label>
+                <input type="file" name="audio" required>
+            </div>
+
+            <div class="form-group">
+                <label class="section-label">2. Mode d'analyse</label>
+                <div class="radio-group">
+
+                    <label class="radio-card">
+                        <input type="radio" name="summary" value="false" checked>
+                        <div class="card-content">
+                            <span class="radio-title">Transcription</span>
+                            <span class="radio-desc">Convertit l'audio en texte brut.</span>
+                        </div>
+                    </label>
+
+                    <label class="radio-card">
+                        <input type="radio" name="summary" value="true">
+                        <div class="card-content">
+                            <span class="radio-title">Transcription + Résumé</span>
+                            <span class="radio-desc">Ajoute une synthèse des points clés.</span>
+                        </div>
+                    </label>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="section-label">3. Modèle Whisper</label>
+
+                <select name="model" style="width:100%; padding:10px; border-radius:8px; border:1px solid #e2e8f0;">
+                    <option value="tiny" selected>
+                        tiny — très rapide, précision limitée
+                    </option>
+                    <option value="base">
+                        base — bon compromis vitesse / précision
+                    </option>
+                    <option value="small">
+                        small — plus lent, meilleure précision
+                    </option>
+                </select>
+
+                <p style="margin-top:8px; font-size:0.85rem; color:#64748b;">
+                    Le modèle choisi influence le temps de traitement et la qualité du résultat.
+                </p>
+            </div>
+
+            <button type="submit" class="btn-primary">
+                Lancer le traitement
+            </button>
+        </form>
+    </div>
+
+    <div id="error-box" class="card hidden" style="border-color:#fecaca; color:#991b1b;">
+        <strong>Erreur :</strong> <span id="error-message"></span>
+    </div>
+
+    <div id="loader" class="loader hidden">
+        <div class="spinner"></div>
+        <p>Analyse en cours, veuillez patienter...</p>
+    </div>
+
+    <div class="results-grid">
+
+        <div class="card result-card">
+            <div class="card-header">
+                <h2>Transcription intégrale</h2>
+            </div>
+            <div id="transcription-output" class="text-content empty">
+                Les résultats s'afficheront ici après analyse.
+            </div>
+        </div>
+
+        <div class="card result-card">
+            <div class="card-header">
+                <h2>Résumé exécutif</h2>
+            </div>
+            <div id="summary-output" class="text-content empty">
+                Sélectionnez l'option "Résumé" pour générer ce contenu.
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+document.getElementById("transcription-form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+
+    const loader = document.getElementById("loader");
+    const errorBox = document.getElementById("error-box");
+    const errorMessage = document.getElementById("error-message");
+    const transcriptionOutput = document.getElementById("transcription-output");
+    const summaryOutput = document.getElementById("summary-output");
+
+    errorBox.classList.add("hidden");
+    loader.classList.remove("hidden");
+
+    transcriptionOutput.textContent = "Traitement en cours...";
+    summaryOutput.textContent = "";
+
+    const formData = new FormData(this);
+    const summary = formData.get("summary");
+    const model = formData.get("model");
+
+    try {
+        const response = await fetch(
+            `/transcribe?summary=${summary}&model=${model}`,
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+        const data = await response.json();;
+
+        if (!response.ok) {
+            throw new Error(data.error || "Erreur serveur");
+        }
+
+        transcriptionOutput.textContent = data.transcription || "Aucune transcription.";
+        summaryOutput.textContent = data.summary || "Pas de résumé demandé.";
+
+    } catch (err) {
+        errorMessage.textContent = err.message;
+        errorBox.classList.remove("hidden");
+        transcriptionOutput.textContent = "";
+        summaryOutput.textContent = "";
+    } finally {
+        loader.classList.add("hidden");
+    }
+});
+</script>
+
+</body>
+</html>

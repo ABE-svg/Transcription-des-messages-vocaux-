@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}API Transcription Audio{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<header>
+    <h1>🎧 API de transcription audio</h1>
+    <p class="subtitle">
+        Bienvenue sur l’API de transcription automatique.
+        Cet outil permet de transformer des fichiers audio en texte,
+        avec une option de résumé automatique.
+    </p>
+</header>
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer>
+    <p>Projet académique — Transcription & résumé audio</p>
+</footer>
+
+</body>
+</html>
