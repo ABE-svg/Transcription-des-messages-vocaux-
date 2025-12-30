@@ -27,41 +27,43 @@ Il vise à faciliter l’analyse et la synthèse de conversations, réunions ou 
 
 The following is the tree structure of the project:
 
-Transcription-des-messages-vocaux-/
-├─ app/
-│  ├─ __init__.py
-│  ├─ api.py                 
-│  │
-│  ├─ docs/                       
-│  │  └─ swagger.yaml
-│  │
-│  ├─ services/                  
-│  │  ├─summary_service.py
-│  │  └─ transcribe_service.py   
-│  │
-│  ├─ static/ 
-│  │  └─ style.css
-│  │
-│  ├─ templates/ 
-│  │  ├─ base.html
-│  │  └─ index.html
-│  │
-│  └─ utils/                     
-│     └─ audio_utils.py               
-│
-├─ tests/
-│  ├─ test_api.py  
-│  ├─ test_summary.py              
-│  └─ test_transcription.py
-│
-├─ .dockerignore
-├─ .gitignore
-├─ LICENSE
-├─ README.md
-├─ docker-compose.yml     
-├─ dockerfile   
-├─ requirements.txt
-└─ setup_env.sh
+.. code-block:: plaintext
+
+                Transcription-des-messages-vocaux-/
+                ├─ app/
+                │  ├─ __init__.py
+                │  ├─ api.py                 
+                │  │
+                │  ├─ docs/                       
+                │  │  └─ swagger.yaml
+                │  │
+                │  ├─ services/                  
+                │  │  ├─summary_service.py
+                │  │  └─ transcribe_service.py   
+                │  │
+                │  ├─ static/ 
+                │  │  └─ style.css
+                │  │
+                │  ├─ templates/ 
+                │  │  ├─ base.html
+                │  │  └─ index.html
+                │  │
+                │  └─ utils/                     
+                │     └─ audio_utils.py               
+                │
+                ├─ tests/
+                │  ├─ test_api.py  
+                │  ├─ test_summary.py              
+                │  └─ test_transcription.py
+                │
+                ├─ .dockerignore
+                ├─ .gitignore
+                ├─ LICENSE
+                ├─ README.md
+                ├─ docker-compose.yml     
+                ├─ dockerfile   
+                ├─ requirements.txt
+                └─ setup_env.sh
 
 
 ---
