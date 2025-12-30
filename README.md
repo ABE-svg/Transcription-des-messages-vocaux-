@@ -51,14 +51,25 @@ La structure arborescente du projet est la suivante :
                 │  │  └─ index.html
                 │  │
                 │  └─ utils/                     
-                │     └─ audio_utils.py               
+                │     └─ audio_utils.py
+                │
+                ├─ bot/
+                │  ├─ __init__.py
+                │  ├─ main.py                 
+                │  │
+                │  │
+                │  └─ utils/
+                │     ├─__init__.py 
+                │     ├─translate.py                    
+                │     └─ transcribe.py
                 │
                 ├─ tests/
                 │  ├─ test_api.py
-                   ├─ test_bot.py  
+                │  ├─ test_bot.py  
                 │  ├─ test_summary.py              
                 │  └─ test_transcription.py
                 │
+                ├─ Fichiers audios/
                 ├─ .dockerignore
                 ├─ .gitignore
                 ├─ LICENSE
@@ -66,6 +77,7 @@ La structure arborescente du projet est la suivante :
                 ├─ docker-compose.yml     
                 ├─ dockerfile   
                 ├─ requirements.txt
+                ├─ pyproject.toml
                 └─ setup_env.sh
 ```
 
@@ -74,7 +86,7 @@ La structure arborescente du projet est la suivante :
 
 ### Chatbot Telegram
 On accède au Chatbot Telegram via le lien: https://t.me/VoiceToMessage_Bot
-Ce Chatbot prend en entrée des messages vocaux (ou fichiers audios) et retourne la version transcrite du dit message, avec option de traduction automatique dans la langue par défaut de l'appareil utilisé (Si l'audio est en français, anglais ou Russe seulement). Cette transcription est très sensible à l'accent de l'utilisateur. 
+Ce Chatbot prend en entrée des messages vocaux  et retourne la version transcrite, avec option de traduction automatique dans la langue par défaut de l'appareil utilisé (Si l'audio est en français, anglais, allemand,espagnol,italien, russe). Cette transcription est sensible à l'accent de l'utilisateur. 
 Note: Ces spécificités sont intrinsèquement liées à la version de Whisper API utilisée. 
 
 Exemple de rendu sur Telegram:
