@@ -58,4 +58,6 @@ L'application présente différents niveaux de perfection selon la version de Wh
 - base: Bon compromis vitesse/précision
 - small: Plus lent, meilleure précision (Nécessite un GPU)
 
+Le dossier **Fichiers audios** contient des audios qui permettent à l'utilisateur de tester l'application.
+ 
 Exemple de rendu sur l'application Web: 
