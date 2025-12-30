@@ -1,6 +1,5 @@
-.venv/
-venv/
+.env
+.venv
+tg_bot.egg-info
 __pycache__/
-*.pyc
-.vscode/
-Thumbs.db
+.pytest_cache/

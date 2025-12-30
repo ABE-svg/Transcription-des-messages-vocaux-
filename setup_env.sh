@@ -14,12 +14,26 @@ fi
 
 echo "Python utilisé : $PYTHON"
 
-$PYTHON -m venv .venv
+# $PYTHON -m venv .venv
 
+#activate venv mac or windows 
 source .venv/Scripts/activate 2>/dev/null || source .venv/bin/activate
 
-$PYTHON -m pip install --upgrade pip
-$PYTHON -m pip install -r requirements.txt
+#install libraries 
+python -m pip install --upgrade pip
+python -m pip install --no-cache-dir -r requirements.txt
+#make sure for pytest that bot package can be imported , the path will be TGBOT/
+python -m pip install -e .
 
+pytest || {
+  echo "Tests failed"
+  deactivate
+  exit 1
+}
 
-echo "Environnement prêt. Pour l'activer exécute : source .venv/Scripts/activate"
+echo "tous les tests sotn excecutés "
+echo "Environnement prêt. Pour l'activer exécutez : "
+echo "Vous ne pourrez par lancer le bot, car il est déjà lancé sur VPS  "
+echo "source .venv/Scripts/activate    # Windows Git Bash"
+echo "source .venv/bin/activate        # Linux / Mac / WSL"
+
