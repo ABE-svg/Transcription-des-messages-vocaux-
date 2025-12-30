@@ -137,4 +137,15 @@ L'application présente différents niveaux de perfection selon la version de Wh
 
 Le dossier **Fichiers audios** contient des audios qui permettent à l'utilisateur de tester l'application.
  
-Exemple de rendu sur l'application Web: 
+## À propos du bot Telegram
+
+Le bot **ne sera pas lancé localement** par ce projet.
+
+- Une instance du bot est **déjà déployée et en cours d’exécution sur un VPS**.
+- Le lancement local nécessite :
+  - des clés API **payantes**
+  - une configuration spécifique via **BotFather**
+  - une infrastructure déjà préparée côté serveur sur Linux
+
+Pour ces raisons, le démarrage automatique du bot Telegram est volontairement désactivé dans ce projet. Le code du bot est présent pour référence technique.
+
