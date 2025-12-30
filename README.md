@@ -92,12 +92,33 @@ Note: Ces spécificités sont intrinsèquement liées à la version de Whisper A
 Exemple de rendu sur Telegram:
 
  ### Application Web
- **Prérequis**
-- Docker installé
 
-**Lancement avec Docker**
+## Prérequis
+
+### Option 1 — Exécution locale
+- Python **3.11** installé
+- Git Bash (Windows)
+
+### Option 2 — Exécution via Docker
+- Docker installé
+- Docker Compose installé
+
+---
+
+## Lancement du projet
+
+### 1️⃣ Option 1 — Exécution locale 
+
+À la racine du projet, exécuter dans **Git Bash** :
+
 ```bash
-git clone <url_du_repo>
+bash ./setup_env.sh
+```
+
+### 1️⃣ Option 1 — Lancement avec Docker
+
+```bash
+git clone https://github.com/ABE-svg/Transcription-des-messages-vocaux-
 cd Transcription-des-messages-vocaux-
 docker compose up --build
 ```
