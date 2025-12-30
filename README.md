@@ -41,6 +41,6 @@ Cette application prend en entrée tout type de fichier (audio, vidéo), détect
 L'application présente différents niveaux de perfection selon la version de Whisper API utilisée: 
 - tiny: Très rapide, précision limitée
 - base: Bon compromis vitesse/précision
-- small: Plus lent, meilleure précision (Nécessite un GPU)
+- small: Plus lent, meilleure précision 
 
 Exemple de rendu sur l'application Web: 
