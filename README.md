@@ -1,10 +1,10 @@
 # Transcription de messages vocaux
 
 ---
-- ABE Kevin (https://github.com/ABE-svg)
-- ALUCH Yasmine (https://github.com/Yasmxne)
-- AYRAPETYAN Artur (https://github.com/aayrapet)
-- GHORAFI Manal (https://github.com/Manalghorafi)
+- ABE Kevin                 (https://github.com/ABE-svg)
+- ALUCH Yasmine             (https://github.com/Yasmxne)
+- AYRAPETYAN Artur          (https://github.com/aayrapet)
+- GHORAFI Manal             (https://github.com/Manalghorafi)
 - MAKAMWE Pierrette Josiane (https://github.com/josiepierr)
 ---
 
