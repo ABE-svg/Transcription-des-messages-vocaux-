@@ -14,7 +14,7 @@ fi
 
 echo "Python utilisé : $PYTHON"
 
-# $PYTHON -m venv .venv
+$PYTHON -m venv .venv
 
 #activate venv mac or windows 
 source .venv/Scripts/activate 2>/dev/null || source .venv/bin/activate
