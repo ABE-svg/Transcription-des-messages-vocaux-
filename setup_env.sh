@@ -20,7 +20,7 @@ source .venv/Scripts/activate 2>/dev/null || source .venv/bin/activate
 
 #install libraries 
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+python -m pip install --no-cache-dir -r requirements.txt
 #make sure for pytest that bot package can be imported , the path will be TGBOT/
 python -m pip install -e .
 
