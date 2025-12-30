@@ -17,7 +17,7 @@ Il vise à faciliter l’analyse et la synthèse de conversations, réunions ou 
 ## Technologies utilisées
 - **Flask** — Framework web pour créer l’API REST  
 - **OpenAI Whisper API** / **SpeechRecognition** — Transcription vocale (speech-to-text)  
-- **spaCy** — Résumé automatique du texte  
+- **Transformer (BART via Hugging Face)** — Résumé automatique du texte  
 - **Pytest** — Tests unitaires  
 - **Docker** — Conteneurisation et déploiement reproductible  
 
@@ -28,19 +28,33 @@ Il vise à faciliter l’analyse et la synthèse de conversations, réunions ou 
 ---
 ## Résultats
 
-**Chatbot Telegram**
+### Chatbot Telegram
 On accède au Chatbot Telegram via le lien: https://t.me/VoiceToMessage_Bot
 Ce Chatbot prend en entrée des messages vocaux (ou fichiers audios) et retourne la version transcrite du dit message, avec option de traduction automatique dans la langue par défaut de l'appareil utilisé (Si l'audio est en français, anglais ou Russe seulement). Cette transcription est très sensible à l'accent de l'utilisateur. 
 Note: Ces spécificités sont intrinsèquement liées à la version de Whisper API utilisée. 
 
 Exemple de rendu sur Telegram:
 
-**Application Web**
-AJouter le mode d'utilisation après la Dockerisation...
+ ### Application Web
+ **Prérequis**
+- Docker installé
+
+**Lancement avec Docker**
+```bash
+git clone <url_du_repo>
+cd Transcription-des-messages-vocaux-
+docker compose up --build
+
+
+Accès à l'interface web : http://localhost:5000
+Accès à la documentation Swagger : http://localhost:5000/apidocs/
+
+⚠️ Le premier build Docker ainsi que le chargement initial de l’interface peuvent prendre plusieurs minutes, notamment en raison du téléchargement des modèles de transcription.
+
 Cette application prend en entrée tout type de fichier (audio, vidéo), détecte les messages audios et fait la transcription avec une option "summary", qui renvoit un résumé du message (400 mots maximum).
 L'application présente différents niveaux de perfection selon la version de Whisper API utilisée: 
 - tiny: Très rapide, précision limitée
 - base: Bon compromis vitesse/précision
-- small: Plus lent, meilleure précision (Nécessite un GPU)
+- small: Plus lent, meilleure précision (à utiliser de préférence avec un GPU)
 
 Exemple de rendu sur l'application Web: 
