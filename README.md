@@ -107,5 +107,5 @@ Le dossier **Fichiers audios** contient des audios qui permettent à l'utilisate
  
 Exemple de rendu sur l'application Web: 
 
-![Transcription audio](images/Transcription%20audio.png)
-![Transcription audio](images/Transcription%20audio1.png)
+![Transcription audio](images/Transcriptionaudio.png)
+![Transcription audio](images/Transcriptionaudio1.png)
