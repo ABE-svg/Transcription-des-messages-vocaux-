@@ -115,7 +115,7 @@ Exemple de rendu sur Telegram:
 bash ./setup_env.sh
 ```
 
-### 1️⃣ Option 1 — Lancement avec Docker
+### 2️⃣ Option 2 — Lancement avec Docker
 
 ```bash
 git clone https://github.com/ABE-svg/Transcription-des-messages-vocaux-
