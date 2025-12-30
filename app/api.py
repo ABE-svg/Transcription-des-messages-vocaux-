@@ -28,6 +28,8 @@ def create_app():
             return jsonify({"error": "Aucun fichier audio reçu"}), 400
 
         audio_file = request.files["audio"]
+        model_name = request.args.get("model", "tiny")
+
 
         if audio_file.filename == "":
             return jsonify({"error": "Nom de fichier invalide"}), 400
@@ -38,7 +40,7 @@ def create_app():
         try:
             file_path = save_temp_file(audio_file)
 
-            transcription = transcribe_audio(file_path)
+            transcription = transcribe_audio(file_path, model_name)
             generate_summary = request.args.get("summary", "false").lower() == "true"
 
             result = {"transcription": transcription}
@@ -57,7 +59,3 @@ def create_app():
 
     return app
 
-
-if __name__ == '__main__':
-    app = create_app()
-    app.run(debug=True)
