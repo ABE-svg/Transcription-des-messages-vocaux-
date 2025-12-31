@@ -10,7 +10,7 @@
 ---
 
 ## Objectif
-Ce projet a pour objectif de **convertir un message vocal en texte** avec **résumé automatique**.  
+Ce projet a pour objectif de **convertir un message vocal en texte** avec **résumé automatique** et **traduction**.  
 Il vise à faciliter l’analyse et la synthèse de conversations, réunions ou messages vocaux grâce à une interface API simple et efficace.
 
 ---
@@ -20,7 +20,8 @@ Il vise à faciliter l’analyse et la synthèse de conversations, réunions ou 
 - **OpenAI Whisper API** / **SpeechRecognition** — Transcription vocale (speech-to-text)  
 - **Transformer (BART via Hugging Face)** — Résumé automatique du texte  
 - **Pytest** — Tests unitaires  
-- **Docker** — Conteneurisation et déploiement reproductible  
+- **Docker** — Conteneurisation et déploiement reproductible
+- `Python-telegram-bot` package 
 
 ---
 
@@ -50,13 +51,24 @@ La structure arborescente du projet est la suivante :
                 │  │  └─ index.html
                 │  │
                 │  └─ utils/                     
-                │     └─ audio_utils.py               
+                │     └─ audio_utils.py
+                │
+                ├─ bot/
+                │  ├─ __init__.py
+                │  ├─ main.py                 
+                │  │
+                │  │
+                │  └─ utils/
+                │     ├─__init__.py 
+                │     ├─translate.py                    
+                │     └─ transcribe.py
                 │
                 ├─ tests/
-                │  ├─ test_api.py  
+                │  ├─ test_api.py
                 │  ├─ test_summary.py              
                 │  └─ test_transcription.py
                 │
+                ├─ Fichiers audios/
                 ├─ .dockerignore
                 ├─ .gitignore
                 ├─ LICENSE
@@ -64,6 +76,7 @@ La structure arborescente du projet est la suivante :
                 ├─ docker-compose.yml     
                 ├─ dockerfile   
                 ├─ requirements.txt
+                ├─ pyproject.toml
                 └─ setup_env.sh
 ```
 
@@ -71,9 +84,10 @@ La structure arborescente du projet est la suivante :
 ## Résultats
 
 ### Chatbot Telegram
+
 On accède au Chatbot Telegram via le lien: https://t.me/VoiceToMessage_Bot
-Ce Chatbot prend en entrée des messages vocaux (ou fichiers audios) et retourne la version transcrite du dit message, avec option de traduction automatique dans la langue par défaut de l'appareil utilisé (Si l'audio est en français, anglais ou Russe seulement). Cette transcription est très sensible à l'accent de l'utilisateur. 
-Note: Ces spécificités sont intrinsèquement liées à la version de Whisper API utilisée. 
+Ce Chatbot prend en entrée des messages vocaux  et retourne la version transcrite, avec option de traduction automatique dans la langue par défaut de l'appareil utilisé (Si l'audio est en français, anglais, allemand,espagnol,italien, russe). Cette transcription est sensible à l'accent de l'utilisateur. Ce Bot est hébérgé sur VPS. On utilise ici l'API de OPEN AI et pas les ressources de VPS (CPU/GPU) contrairement à l'application web. 
+Ce choix est fait pour éviter l'utilisation excessive de l'API payant sur telegram. 
 
 Exemple de rendu sur Telegram:
 
@@ -86,9 +100,42 @@ Exemple de rendu sur Telegram:
 - Docker installé
 - L'utilisation en local de whisper nécessite de télécharger ffmpeg sur sa machine via le lien https://www.ffmpeg.org/download.html ,sinon la transcription renvoie une erreur.
 
-**Lancement avec Docker**
+## Prérequis
+
+### Option 1 — Exécution locale
+- Python **3.11** installé
+- Git Bash (Windows)
+
+### Option 2 — Exécution via Docker
+- Docker installé
+- Docker Compose installé
+
+---
+
+## Lancement du projet
+
+### 1️⃣ Option 1 — Exécution locale 
+
+À la racine du projet, exécuter dans **Git Bash** :
+
 ```bash
-git clone <url_du_repo>
+bash ./setup_env.sh
+```
+
+Puis, activez la `.venv` créé et lancez :
+
+```bash
+python -m app.api
+```
+Si tout se passe bien, Flask affiche : Running on http://127.0.0.1:5000/
+Ouvrez un navigateur et aller à l’adresse
+
+
+
+### 2️⃣ Option 2 — Lancement avec Docker
+
+```bash
+git clone https://github.com/ABE-svg/Transcription-des-messages-vocaux-
 cd Transcription-des-messages-vocaux-
 docker compose up --build
 ```
@@ -115,3 +162,15 @@ Exemple de rendu sur l'application Web:
 <p align="center">
   <img src="images/Transcriptionaudio1.png" width="600"/>
 </p>
+## À propos du bot Telegram
+
+Le bot **ne sera pas lancé localement** par ce projet.
+
+- Une instance du bot est **déjà déployée et en cours d’exécution sur un VPS**.
+- Le lancement local nécessite :
+  - des clés API **payantes**
+  - une configuration spécifique via **BotFather**
+  - une infrastructure déjà préparée côté serveur sur Linux
+
+Pour ces raisons, le démarrage automatique du bot Telegram est volontairement désactivé dans ce projet. Le code du bot est présent pour référence technique.
+
