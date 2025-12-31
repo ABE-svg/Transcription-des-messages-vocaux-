@@ -85,6 +85,7 @@ La structure arborescente du projet est la suivante :
 
 ### Chatbot Telegram
 
+Mes amis m'envoient toujours les messages vocaux longs mais je peux pas les écouter, d'où vient le besoin de les transcrire par un simple transfert au bot.
 On accède au Chatbot Telegram via le lien: https://t.me/VoiceToMessage_Bot
 Ce Chatbot prend en entrée des messages vocaux  et retourne la version transcrite, avec option de traduction automatique dans la langue par défaut de l'appareil utilisé (Si l'audio est en français, anglais, allemand,espagnol,italien, russe). Cette transcription est sensible à l'accent de l'utilisateur. Ce Bot est hébérgé sur VPS. On utilise ici l'API de OPEN AI et pas les ressources de VPS (CPU/GPU) contrairement à l'application web. 
 Ce choix est fait pour éviter l'utilisation excessive de l'API payant sur telegram. 
