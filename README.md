@@ -100,8 +100,9 @@ Exemple de rendu sur Telegram:
 ## Prérequis
 
 ### Option 1 — Exécution locale
-- Python **3.11** installé
+- Python **3.11** installé (python311 et python311\Scripts dans les variables d'envoronnement dans path)
 - Git Bash (Windows)
+- Download https://ffmpeg.org/ and add to system environment variables to path C:\ffmpeg\bin (important) 
 
 ### Option 2 — Exécution via Docker
 - Docker installé
