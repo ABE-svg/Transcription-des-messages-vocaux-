@@ -14,12 +14,12 @@ fi
 
 echo "Python utilisé : $PYTHON"
 
-$PYTHON -m venv .venv
+# $PYTHON -m venv .venv
 
 source .venv/Scripts/activate 2>/dev/null || source .venv/bin/activate
 
-$PYTHON -m pip install --upgrade pip
-$PYTHON -m pip install -r requirements.txt
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 
 
 echo "Environnement prêt. Pour l'activer exécute : source .venv/Scripts/activate"
