@@ -96,9 +96,6 @@ Exemple de rendu sur Telegram:
 </p>
 
  ### Application Web
- **Prérequis**
-- Docker installé
-- L'utilisation en local de whisper nécessite de télécharger ffmpeg sur sa machine via le lien https://www.ffmpeg.org/download.html ,sinon la transcription renvoie une erreur.
 
 ## Prérequis
 
@@ -121,6 +118,8 @@ Exemple de rendu sur Telegram:
 ```bash
 bash ./setup_env.sh
 ```
+
+Cela excecute crée l'environement et installe les packages et fais les tests unitaires.
 
 Puis, activez la `.venv` créé et lancez :
 
@@ -162,6 +161,7 @@ Exemple de rendu sur l'application Web:
 <p align="center">
   <img src="images/Transcriptionaudio1.png" width="600"/>
 </p>
+
 ## À propos du bot Telegram
 
 Le bot **ne sera pas lancé localement** par ce projet.
